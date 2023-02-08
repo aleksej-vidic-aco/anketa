@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         let like = localStorage.getItem("like");
         let dislike = localStorage.getItem("dislike");
-        const res = await axios.get("http://localhost:5000/getLikesAndDislikes");
+        const res = await axios.get("/getLikesAndDislikes");
         console.log(res.data);
         console.log(like, dislike);
         podrzava.innerText = res.data.likes;
@@ -36,13 +36,13 @@ like.addEventListener("click", () => {
             obj.like = localStorage.getItem("like");
             console.log(obj);
             removeCircle(circleGreen);
-            changeVote("http://localhost:5000/like", obj);
+            changeVote("/like", obj);
             return;
         }
         toggleCircle(circleGreen)
         localStorage.setItem("like", true);
         obj.like = localStorage.getItem("like");
-        changeVote("http://localhost:5000/like", obj);
+        changeVote("/like", obj);
         console.log(obj);
 }, true)
 dislike.addEventListener("click", () => {
@@ -58,13 +58,13 @@ dislike.addEventListener("click", () => {
         obj.dislike = localStorage.getItem("dislike");
         console.log(obj);
         removeCircle(circleRed);
-        changeVote("http://localhost:5000/dislike", obj);
+        changeVote("/dislike", obj);
         return;
     }
     toggleCircle(circleRed)
     localStorage.setItem("dislike", true);
     obj.dislike = localStorage.getItem("dislike");
-    changeVote("http://localhost:5000/dislike", obj);
+    changeVote("/dislike", obj);
     console.log(obj);
 }, true)
 function toggleCircle(circle) {
