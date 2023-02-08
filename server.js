@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -7,7 +8,7 @@ const Anketa = require("./Anketa");
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(express.static("public"));
-mongoose.connect("mongodb+srv://aleksej123:aleksej123@cluster0.kbhai.mongodb.net/Anketa?retryWrites=true&w=majority", {useNewUrlParser: true}).then(() => console.log("Baza je povezana"));
+mongoose.connect(proccess.env.MONGO_DB_URI, {useNewUrlParser: true}).then(() => console.log("Baza je povezana"));
 app.use(bodyParser.json());
 app.use(cors({
     origin: 'http://127.0.0.1:5500',
@@ -97,6 +98,6 @@ app.put("/dislike", async (req, res) => {
     }
 })
 
-app.listen(5000, () => {
+app.listen(proccess.env.PORT || 5000, () => {
     console.log("Server radi");
 })
