@@ -5,11 +5,12 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const Anketa = require("./Anketa");
+const PORT = process.env.PORT || 5000;
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(express.static("public"));
 mongoose.connect(proccess.env.MONGO_DB_URI, {useNewUrlParser: true}).then(() => {
-    app.listen(proccess.env.PORT || 5000, () => {
+    app.listen(PORT || 5000, () => {
         console.log("Server radi");
     })
 });
