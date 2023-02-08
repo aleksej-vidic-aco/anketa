@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(express.static("public"));
-mongoose.connect(proccess.env.MONGO_URI, {useNewUrlParser: true}).then(() => {
+mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}).then(() => {
     app.listen(PORT || 5000, () => {
         console.log("Server radi");
     })
