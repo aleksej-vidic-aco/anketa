@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Hubballi&display=swap');
+*, *::after, *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+h1, p {
+    font-family: 'Hubballi', cursive;
+}
+
+body {
+    background-image: url("racunar1.png");
+    background-position: center;
+    background-size: cover;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    min-height: 100vh;
+    position: relative;
+}
+
+.anketa {
+    width: min(75rem, 90%);
+    height: max(10rem, 25%);
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    animation: anketaScale 0.5s;
+    position: relative;
+    border: 1px solid #4906C8;
+}
+.title {
+    text-align: center;
+    font-size: clamp(2rem, 3vw + 1rem, 4rem);
+    margin-inline: auto;
+    margin-top: 1rem;
+}
+.btn {
+    position: absolute;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0;
+    border: 0;
+    color: #ffffff;
+    cursor: pointer;
+    padding: clamp(2.30rem, 3vw + 0.1rem, 2.6rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 50%;
+}
+.like {
+    bottom: -11px;
+    left: -14px;
+    background-color: #5E9C76;
+}
+.dislike {
+    bottom: -11px;
+    right: -14px;
+    background-color: #ff0000;
+}
+.brojac {
+    font-size: clamp(1.25rem, 3vw + 0.1rem, 2rem);
+}
+.circle-green {
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    left: -14px;
+    bottom: -11px;
+    z-index: -1;
+    border-radius: 50%;
+    background-color: #5E9C76;
+    transition: transform 1s;
+}
+.circle-red { 
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    right: -14px;
+    bottom: -11px;
+    z-index: -1;
+    border-radius: 50%;
+    background-color: #ff0000;
+    transition: transform 1s;
+    
+}
+.scale-circle {
+    transform: scale(50);
+    
+}
+@keyframes anketaScale {
+    from {
+        transform: scale(0);
+    } to {
+        transform: scale(1);
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    body {
+        background-image: url("telefon.png");
+    }
+}
