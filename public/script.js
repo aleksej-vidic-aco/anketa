@@ -34,16 +34,16 @@ like.addEventListener("click", () => {
             localStorage.setItem("like", false);
             console.log(localStorage.getItem("like"));
             obj.like = localStorage.getItem("like");
-            console.log(obj);
-            removeCircle(circleGreen);
+            
             changeVote("/like", obj);
+            removeCircle(circleGreen);
             return;
         }
-        toggleCircle(circleGreen)
+        
         localStorage.setItem("like", true);
         obj.like = localStorage.getItem("like");
         changeVote("/like", obj);
-        console.log(obj);
+        toggleCircle(circleGreen);
 }, true)
 dislike.addEventListener("click", () => {
     let obj = {};
@@ -56,16 +56,16 @@ dislike.addEventListener("click", () => {
         localStorage.setItem("dislike", false);
         console.log(localStorage.getItem("dislike"));
         obj.dislike = localStorage.getItem("dislike");
-        console.log(obj);
-        removeCircle(circleRed);
+        
         changeVote("/dislike", obj);
+        removeCircle(circleRed);
         return;
     }
-    toggleCircle(circleRed)
+    
     localStorage.setItem("dislike", true);
     obj.dislike = localStorage.getItem("dislike");
     changeVote("/dislike", obj);
-    console.log(obj);
+    toggleCircle(circleRed);
 }, true)
 function toggleCircle(circle) {
     circle.classList.toggle("scale-circle");
