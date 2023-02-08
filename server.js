@@ -8,7 +8,11 @@ const Anketa = require("./Anketa");
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(express.static("public"));
-mongoose.connect(proccess.env.MONGO_DB_URI, {useNewUrlParser: true}).then(() => console.log("Baza je povezana"));
+mongoose.connect(proccess.env.MONGO_DB_URI, {useNewUrlParser: true}).then(() => {
+    app.listen(proccess.env.PORT || 5000, () => {
+        console.log("Server radi");
+    })
+});
 app.use(bodyParser.json());
 app.use(cors({
     origin: 'http://127.0.0.1:5500',
@@ -98,6 +102,3 @@ app.put("/dislike", async (req, res) => {
     }
 })
 
-app.listen(proccess.env.PORT || 5000, () => {
-    console.log("Server radi");
-})
