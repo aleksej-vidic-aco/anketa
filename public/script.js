@@ -61,9 +61,9 @@ function createElements(datas) {
 }
 async function likePost(e, like, dislike, id) {
     try {
-        localStorage.setItem(dislike, false);
         let getLike = localStorage.getItem(like);
         let getDislike = localStorage.getItem(dislike);
+        localStorage.setItem(dislike, false);
         if(getLike === "true") {
             localStorage.setItem(like, false);
             getLike = localStorage.getItem(like);
@@ -94,9 +94,9 @@ async function likePost(e, like, dislike, id) {
 }
 async function dislikePost(e, like, dislike, id) {
     try {
-        localStorage.setItem(like, false);
         let getLike = localStorage.getItem(like);
         let getDislike = localStorage.getItem(dislike);
+        localStorage.setItem(like, false);
         if(getDislike === "true") {
             localStorage.setItem(dislike, false);
             getDislike = localStorage.getItem(dislike);

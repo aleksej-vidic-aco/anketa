@@ -71,7 +71,7 @@ app.put("/likePost/:id", async (req, res) => {
         }
         if(like === "true" && dislike === "false") {
             anketa.like = anketa.like + 1;
-            if(anketa.dislike > 0)  anketa.dislike = anketa.dislike - 1;
+            
         }
         const saved = await anketa.save();
         res.json({
@@ -105,7 +105,7 @@ app.put("/dislikePost/:id", async (req, res) => {
         }
         if(like === "false" && dislike === "true") {
             anketa.dislike = anketa.dislike + 1;
-            if(anketa.like > 0) anketa.like = anketa.like - 1;
+            
         }
         const saved = await anketa.save();
         res.json({
