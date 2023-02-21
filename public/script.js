@@ -1,86 +1,117 @@
-const circleGreen = document.querySelector(".circle-green");
-const circleRed = document.querySelector(".circle-red");
-const like = document.querySelector(".like");
-const dislike = document.querySelector(".dislike");
-const podrzava = document.querySelector(".podrzava");
-const nepodrzava = document.querySelector(".nepodrzava");
-document.addEventListener("DOMContentLoaded", async () => { 
+const posts = document.querySelector(".posts");
+document.addEventListener("DOMContentLoaded", async () => {
     try {
-        let like = localStorage.getItem("like");
-        let dislike = localStorage.getItem("dislike");
-        const res = await axios.get("/getLikesAndDislikes");
+        if(localStorage.getItem("like1") == null) {
+            for(let i = 1; i <= 4; i++) {
+                localStorage.setItem(`like${i}`, false);
+                localStorage.setItem(`dislike${i}`, false);
+            }
+        }
+        const res = await axios.get("http://localhost:5000/getAllPosts");
         console.log(res.data);
-        console.log(like, dislike);
-        podrzava.innerText = res.data.likes;
-        nepodrzava.innerText = res.data.dislikes;
-        if(like == null && dislike == null) {
-            localStorage.setItem("like", false);
-            localStorage.setItem("dislike", false);
-        }
-        if(like === "true") toggleCircle(circleGreen);
-        if(dislike === "true") toggleCircle(circleRed);
-    } catch(err) {
-        console.log(err);
+        createElements(res.data.data);
+    } catch (error) {
+        console.log(error)
     }
-});
-like.addEventListener("click", () => {
-        let obj = {};
-        obj.dislike = localStorage.getItem("dislike");
-        localStorage.setItem("dislike", false);
-        if(circleRed.classList.contains("scale-circle")) {
-            removeCircle(circleRed)
-        }
-        if(localStorage.getItem("like") === "true") {
-            localStorage.setItem("like", false);
-            console.log(localStorage.getItem("like"));
-            obj.like = localStorage.getItem("like");
-            
-            changeVote("/like", obj);
-            removeCircle(circleGreen);
-            return;
-        }
-        
-        localStorage.setItem("like", true);
-        obj.like = localStorage.getItem("like");
-        changeVote("/like", obj);
-        toggleCircle(circleGreen);
-}, true)
-dislike.addEventListener("click", () => {
-    let obj = {};
-    obj.like = localStorage.getItem("like");
-    localStorage.setItem("like", false);
-    if(circleGreen.classList.contains("scale-circle")) {
-        removeCircle(circleGreen)
-    }
-    if(localStorage.getItem("dislike") === "true") {
-        localStorage.setItem("dislike", false);
-        console.log(localStorage.getItem("dislike"));
-        obj.dislike = localStorage.getItem("dislike");
-        
-        changeVote("/dislike", obj);
-        removeCircle(circleRed);
-        return;
-    }
-    
-    localStorage.setItem("dislike", true);
-    obj.dislike = localStorage.getItem("dislike");
-    changeVote("/dislike", obj);
-    toggleCircle(circleRed);
-}, true)
-function toggleCircle(circle) {
-    circle.classList.toggle("scale-circle");
+})
+function createElements(datas) { 
+    console.log(datas);
+    posts.innerHTML = "";
+    datas.forEach((post, index) => {
+        console.log(index);
+        console.log(post);
+        const div = document.createElement("div");
+        const h1 = document.createElement("h1");
+        const likeBtn = document.createElement("button");
+        const dislikeBtn = document.createElement("button");
+        h1.innerText = post.title;
+        likeBtn.innerHTML = `
+        <i class="material-icons">thumb_up</i>
+        <p class = "brojac podrzava ">${post.like}</p>
+        `;
+        dislikeBtn.innerHTML = `
+        <i class="material-icons">thumb_down</i>
+        <p class = "brojac nepodrzava">${post.dislike}</p>
+        `;
+        h1.classList.add("title");
+        likeBtn.classList.add("btn");
+        likeBtn.classList.add("like");
+        dislikeBtn.classList.add("btn");
+        likeBtn.addEventListener("click", (e) => likePost(e, `like${index + 1}`, `dislike${index + 1}`, post._id), true);
+        dislikeBtn.addEventListener("click", (e) => dislikePost(e, `like${index + 1}`, `dislike${index + 1}`, post._id), true);
+        dislikeBtn.classList.add("dislike");
+        div.classList.add("post");
+        div.append(h1, likeBtn, dislikeBtn);
+        posts.append(div);
+    })
 }
-
-function removeCircle(circle) {
-    circle.classList.remove("scale-circle");
-}
-async function changeVote(url, obj) {
+async function likePost(e, like, dislike, id) {
     try {
-        const res = await axios.put(url, obj);
-        console.log(res.data);
-        podrzava.innerText = res.data.likes;
-        nepodrzava.innerText = res.data.dislikes;
+        localStorage.setItem(dislike, false);
+        let getLike = localStorage.getItem(like);
+        let getDislike = localStorage.getItem(dislike);
+        if(getLike === "true") {
+            localStorage.setItem(like, false);
+            getLike = localStorage.getItem(like);
+        } else {
+            localStorage.setItem(like, true);
+            getLike = localStorage.getItem(like);
+        }
+        const res = await axios.put(`http://localhost:5000/likePost/${id}`, {
+            like: getLike,
+            dislike: getDislike
+        });
+        if(res.status === 200) {
+            let like = e.target.closest(".like");
+            let dislike = like.nextSibling;
+            dislike.innerHTML = `
+            <i class="material-icons">thumb_down</i>
+            <p class = "brojac nepodrzava">${res.data.dislikes}</p>
+            `
+            like.innerHTML = `
+            <i class="material-icons">thumb_up</i>
+            <p class = "brojac podrzava ">${res.data.likes}</p>
+            `;
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+async function dislikePost(e, like, dislike, id) {
+    try {
+        localStorage.setItem(like, false);
+        let getLike = localStorage.getItem(like);
+        let getDislike = localStorage.getItem(dislike);
+        if(getDislike === "true") {
+            localStorage.setItem(dislike, false);
+            getDislike = localStorage.getItem(dislike);
+    } else {
+        localStorage.setItem(dislike, true);
+        getDislike = localStorage.getItem(dislike);
+    }
+        const res = await axios.put(`http://localhost:5000/dislikePost/${id}`, {
+            like: getLike,
+            dislike: getDislike
+        });
+        if(res.status === 200) {
+            let dislike = e.target.closest(".dislike");
+            let like = dislike.previousSibling;
+            dislike.innerHTML = `
+            <i class="material-icons">thumb_down</i>
+            <p class = "brojac nepodrzava">${res.data.dislikes}</p>
+            `
+            like.innerHTML = `
+            <i class="material-icons">thumb_up</i>
+            <p class = "brojac podrzava ">${res.data.likes}</p>
+            `;
+        }
     } catch (error) {
         console.log(error);
     }
+}
+function removeCircle(circle) {
+    circle.classList.remove("scale-circle");
+}
+function toggleCircle(circle) {
+    circle.classList.toggle("scale-circle");
 }

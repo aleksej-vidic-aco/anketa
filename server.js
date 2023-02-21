@@ -19,10 +19,107 @@ app.use(cors({
     origin: 'http://127.0.0.1:5500',
     optionsSuccessStatus: 200
 }))
-
+app.post("/create", async (req, res) => {
+    try {
+        const {title} = req.body;
+        const newPost = await Anketa.create({title: title});
+        if(newPost) {
+            res.json({
+                data: newPost
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        res.json({
+            msg: "Greska"
+        })
+    }
+})
+app.get("/getAllPosts", async (req, res) => {
+    try {
+       const allPosts = await Anketa.find({});
+       res.json({
+        data: allPosts
+       }) 
+    } catch (error) {
+        console.log(error);
+        res.json({
+            msg: "Greska"
+        })
+    }
+})
 app.get("/", (req, res) => {
     res.render("index");
 })
+app.put("/likePost/:id", async (req, res) => {
+    try {
+        const {like, dislike} = req.body;
+        const id = req.params.id;
+        const anketa = await Anketa.findById(id);
+        if(anketa == null) {
+            return res.json({
+                success: false,
+                msg: "Nema posta"
+            })
+        }
+        if(like === "false" && dislike === "false" && anketa.like > 0) {
+            anketa.like = anketa.like - 1;
+        }
+        if(like === "true" && dislike === "true" && anketa.dislike > 0) {
+            anketa.dislike = anketa.dislike - 1;
+            anketa.like = anketa.like + 1;
+        }
+        if(like === "true" && dislike === "false") {
+            anketa.like = anketa.like + 1;
+            if(anketa.dislike > 0)  anketa.dislike = anketa.dislike - 1;
+        }
+        const saved = await anketa.save();
+        res.json({
+            likes: saved.like,
+            dislikes: saved.dislike
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            msg: "Greska",
+        })
+    }
+})
+app.put("/dislikePost/:id", async (req, res) => {
+    try {
+        const {like, dislike} = req.body;
+        const id = req.params.id;
+        const anketa = await Anketa.findById(id);
+        if(anketa == null) {
+            return res.json({
+                success: false,
+                msg: "Nema posta",
+            })
+        }
+        if(like === "false" && dislike === "false" && anketa.dislike > 0) {
+            anketa.dislike = anketa.dislike - 1;
+        }
+        if(like === "true" && dislike === "true" && anketa.like > 0) {
+            anketa.like = anketa.like - 1;
+            anketa.dislike = anketa.dislike + 1;
+        }
+        if(like === "false" && dislike === "true") {
+            anketa.dislike = anketa.dislike + 1;
+            if(anketa.like > 0) anketa.like = anketa.like - 1;
+        }
+        const saved = await anketa.save();
+        res.json({
+            likes: saved.like,
+            dislikes: saved.dislike
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            msg: "Greska"
+        })
+    }
+});
 app.get("/getLikesAndDislikes", async (req, res) => {
     try {
         const anketa = await Anketa.findById("63e399862324777590d3eb8c");
@@ -37,6 +134,7 @@ app.get("/getLikesAndDislikes", async (req, res) => {
             likes: anketa.likes,
             dislikes: anketa.dislikes
         })
+        
     } catch (error) {
         console.log(error);
     }

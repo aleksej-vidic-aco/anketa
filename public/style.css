@@ -1,41 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Hubballi&display=swap');
-*, *::after, *::before {
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    z-index: 1;
 }
-
-h1, p {
-    font-family: 'Hubballi', cursive;
-}
-
 body {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    font-size: 16px;
     background-image: url("racunar1.png");
     background-position: center;
     background-size: cover;
-    display: grid;
-    place-items: center;
-    font-size: 16px;
-    min-height: 100vh;
-    position: relative;
 }
-
-.anketa {
-    width: min(75rem, 90%);
-    height: max(10rem, 25%);
+h1, p {
+    font-family: 'Hubballi', cursive;
+}
+.posts {
+    width: min(1400px, 90%);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-inline: auto;
+    gap: 2rem;
+}
+.post {
+    width: 45%;
     background-color: #ffffff;
-    border-radius: 10px;
-    overflow: hidden;
-    animation: anketaScale 0.5s;
     position: relative;
     border: 1px solid #4906C8;
+    border-radius: 10px;
+    overflow: hidden;
+    padding-inline: 1rem;
 }
 .title {
     text-align: center;
-    font-size: clamp(2rem, 3vw + 1rem, 4rem);
+    font-size: clamp(2rem, 3vw + 1rem, 2.5rem);
     margin-inline: auto;
     margin-top: 1rem;
+    margin-bottom: 5rem;
 }
 .btn {
     position: absolute;
@@ -103,5 +106,12 @@ body {
 @media only screen and (max-width: 420px) {
     body {
         background-image: url("telefon.png");
+        padding-top: 2rem;
+    }
+    .posts {
+        flex-direction: column;
+    }
+    .post {
+        width: 100%;
     }
 }

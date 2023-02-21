@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 
 const Anketa = new mongoose.Schema({
-    likes: {
-        type: Number,
-        default: 0
+    title: {
+        type: String,
     },
-    dislikes: {
+    like: {
+        type: Number,
+        default: 0,
+    },
+    dislike: {
         type: Number,
         default: 0
     }
