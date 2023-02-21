@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 localStorage.setItem(`dislike${i}`, false);
             }
         }
-        const res = await axios.get("http://localhost:5000/getAllPosts");
+        const res = await axios.get("/getAllPosts");
         console.log(res.data);
         createElements(res.data.data);
     } catch (error) {
@@ -57,7 +57,7 @@ async function likePost(e, like, dislike, id) {
             localStorage.setItem(like, true);
             getLike = localStorage.getItem(like);
         }
-        const res = await axios.put(`http://localhost:5000/likePost/${id}`, {
+        const res = await axios.put(`/likePost/${id}`, {
             like: getLike,
             dislike: getDislike
         });
@@ -72,6 +72,7 @@ async function likePost(e, like, dislike, id) {
             <i class="material-icons">thumb_up</i>
             <p class = "brojac podrzava ">${res.data.likes}</p>
             `;
+            
         }
     } catch (error) {
         console.log(error)
@@ -89,7 +90,7 @@ async function dislikePost(e, like, dislike, id) {
         localStorage.setItem(dislike, true);
         getDislike = localStorage.getItem(dislike);
     }
-        const res = await axios.put(`http://localhost:5000/dislikePost/${id}`, {
+        const res = await axios.put(`/dislikePost/${id}`, {
             like: getLike,
             dislike: getDislike
         });
