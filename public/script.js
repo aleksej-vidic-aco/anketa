@@ -1,4 +1,15 @@
 const posts = document.querySelector(".posts");
+
+window.addEventListener("load", () => {
+    const loader = document.querySelector(".loader");
+  
+    loader.classList.add("loader--hidden");
+  
+    loader.addEventListener("transitionend", () => {
+      document.body.removeChild(loader);
+    });
+  });
+  
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         if(localStorage.getItem("like1") == null) {
@@ -8,8 +19,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         }
         const res = await axios.get("/getAllPosts");
-        console.log(res.data);
-        createElements(res.data.data);
+        
+        if(res.status === 200) {
+            posts.innerHTML = "";
+            createElements(res.data.data);
+        }
     } catch (error) {
         console.log(error)
     }
